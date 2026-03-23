@@ -5,11 +5,23 @@ export interface ColumnPayload {
   name: string
 }
 
+function unwrap<T>(raw: unknown): T {
+  if (
+    raw !== null &&
+    typeof raw === 'object' &&
+    !Array.isArray(raw) &&
+    'data' in (raw as object)
+  ) {
+    return (raw as { data: T }).data
+  }
+  return raw as T
+}
+
 export const listColumns = (boardId: number): Promise<Column[]> =>
-  client.get<Column[]>(`/api/v1/boards/${boardId}/columns`).then((r) => r.data)
+  client.get(`/api/v1/boards/${boardId}/columns`).then((r) => unwrap<Column[]>(r.data))
 
 export const createColumn = (boardId: number, payload: ColumnPayload): Promise<Column> =>
-  client.post<Column>(`/api/v1/boards/${boardId}/columns`, payload).then((r) => r.data)
+  client.post(`/api/v1/boards/${boardId}/columns`, payload).then((r) => unwrap<Column>(r.data))
 
 export const updateColumn = (
   boardId: number,
@@ -17,8 +29,8 @@ export const updateColumn = (
   payload: ColumnPayload,
 ): Promise<Column> =>
   client
-    .put<Column>(`/api/v1/boards/${boardId}/columns/${columnId}`, payload)
-    .then((r) => r.data)
+    .put(`/api/v1/boards/${boardId}/columns/${columnId}`, payload)
+    .then((r) => unwrap<Column>(r.data))
 
 export const deleteColumn = (boardId: number, columnId: number): Promise<void> =>
   client.delete(`/api/v1/boards/${boardId}/columns/${columnId}`).then(() => undefined)

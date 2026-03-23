@@ -11,10 +11,22 @@ export interface MoveTaskPayload {
   position: number
 }
 
+function unwrap<T>(raw: unknown): T {
+  if (
+    raw !== null &&
+    typeof raw === 'object' &&
+    !Array.isArray(raw) &&
+    'data' in (raw as object)
+  ) {
+    return (raw as { data: T }).data
+  }
+  return raw as T
+}
+
 export const listTasks = (boardId: number, columnId: number): Promise<Task[]> =>
   client
-    .get<Task[]>(`/api/v1/boards/${boardId}/columns/${columnId}/tasks`)
-    .then((r) => r.data)
+    .get(`/api/v1/boards/${boardId}/columns/${columnId}/tasks`)
+    .then((r) => unwrap<Task[]>(r.data))
 
 export const createTask = (
   boardId: number,
@@ -22,8 +34,8 @@ export const createTask = (
   payload: TaskPayload,
 ): Promise<Task> =>
   client
-    .post<Task>(`/api/v1/boards/${boardId}/columns/${columnId}/tasks`, payload)
-    .then((r) => r.data)
+    .post(`/api/v1/boards/${boardId}/columns/${columnId}/tasks`, payload)
+    .then((r) => unwrap<Task>(r.data))
 
 export const updateTask = (
   boardId: number,
@@ -32,8 +44,8 @@ export const updateTask = (
   payload: TaskPayload,
 ): Promise<Task> =>
   client
-    .put<Task>(`/api/v1/boards/${boardId}/columns/${columnId}/tasks/${taskId}`, payload)
-    .then((r) => r.data)
+    .put(`/api/v1/boards/${boardId}/columns/${columnId}/tasks/${taskId}`, payload)
+    .then((r) => unwrap<Task>(r.data))
 
 export const deleteTask = (boardId: number, columnId: number, taskId: number): Promise<void> =>
   client
@@ -41,4 +53,4 @@ export const deleteTask = (boardId: number, columnId: number, taskId: number): P
     .then(() => undefined)
 
 export const moveTask = (taskId: number, payload: MoveTaskPayload): Promise<Task> =>
-  client.patch<Task>(`/api/v1/tasks/${taskId}/move`, payload).then((r) => r.data)
+  client.patch(`/api/v1/tasks/${taskId}/move`, payload).then((r) => unwrap<Task>(r.data))
