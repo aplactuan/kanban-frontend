@@ -3,6 +3,7 @@ import type { Column } from '@/types'
 
 export interface ColumnPayload {
   name: string
+  position?: number
 }
 
 function unwrap<T>(raw: unknown): T {
