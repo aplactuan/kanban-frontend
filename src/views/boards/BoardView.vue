@@ -7,6 +7,7 @@ import BoardColumn from '@/components/column/BoardColumn.vue'
 import ColumnFormModal from '@/components/column/ColumnFormModal.vue'
 import { useBoardsStore } from '@/stores/boards'
 import { useColumnsStore } from '@/stores/columns'
+import { useTasksStore } from '@/stores/tasks'
 import type { Column } from '@/types'
 
 const route = useRoute()
@@ -14,6 +15,7 @@ const router = useRouter()
 
 const boardsStore = useBoardsStore()
 const columnsStore = useColumnsStore()
+const tasksStore = useTasksStore()
 
 const pageError = ref<string | null>(null)
 const isPageLoading = ref(false)
@@ -46,10 +48,11 @@ async function loadBoardData() {
   pageError.value = null
 
   try {
-    await Promise.all([
+    const [, columns] = await Promise.all([
       boardsStore.fetchBoard(boardId.value),
       columnsStore.fetchColumns(boardId.value),
     ])
+    await Promise.all(columns.map((col) => tasksStore.fetchTasks(boardId.value!, col.id)))
   } catch {
     pageError.value = 'Failed to load board data. Please try again.'
   } finally {
@@ -178,6 +181,7 @@ watch(
             v-for="column in columns"
             :key="column.id"
             :column="column"
+            :board-id="boardId!"
             @edit="openEditColumnModal"
             @delete="handleDeleteColumn"
           />
