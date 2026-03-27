@@ -155,10 +155,10 @@ async function onDragChange(event: DragChangeEvent) {
 
     <button
       type="button"
-      class="mt-2 flex w-full items-center justify-center gap-1 rounded-lg py-2 text-sm text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
+      class="mt-2 flex w-full items-center justify-center gap-1 rounded-lg py-2 text-sm leading-none text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
       @click="openCreateTaskModal"
     >
-      <Plus :size="14" />
+      <Plus class="h-3.5 w-3.5 shrink-0" />
       Add task
     </button>
   </el-card>

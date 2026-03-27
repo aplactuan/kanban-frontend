@@ -188,10 +188,10 @@ watch(
 
           <button
             type="button"
-            class="flex h-[184px] w-80 shrink-0 items-center justify-center rounded-xl border-2 border-dashed border-slate-300 text-slate-600 transition hover:border-slate-400 hover:text-slate-700"
+            class="flex h-[184px] w-80 shrink-0 items-center justify-center gap-1 rounded-xl border-2 border-dashed border-slate-300 text-sm leading-none text-slate-600 transition hover:border-slate-400 hover:text-slate-700"
             @click="openCreateColumnModal"
           >
-            <Plus class="mr-1" :size="18" />
+            <Plus class="h-3.5 w-3.5 shrink-0" />
             Add Column
           </button>
         </div>
