@@ -49,7 +49,7 @@ function handleDelete(e: Event) {
     <template #header>
       <div class="flex items-start justify-between gap-2">
         <div class="flex min-w-0 flex-1 items-start gap-2">
-          <Document class="mt-0.5 shrink-0 text-slate-500" :size="20" />
+          
           <h3 class="truncate font-semibold text-slate-900">
             {{ board.name }}
           </h3>
